@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import MyCard from './MyCard';
+import MySelect from './MySelect';
+import CitiesService from '../services/citiesService';
 
 interface Student {
     firstName: string,
@@ -12,7 +14,7 @@ interface Student {
 }
 
 function macthHeb(str: string) {
-    return (str.match(/^[\-\u0590-\u05FF]+$/))
+    return (str.match(/^[-\u0590-\u05FF]+$/))
 }
 function macthInt(str: string) {
     const parsed = parseInt(str, 10);
@@ -23,6 +25,20 @@ const StudentsForm: React.FC<{}> = () => {
     //const [ firstName, setFirstName ] = useState('');
     const [form, setForm] = useState({} as Student);
     const [errors, setErrors] = useState({} as Student);
+    const [citisArr, setCitisArr] = useState([] as any[]);
+    const onSelectCity = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+        console.log(event.target.value);
+      }, []);
+
+    useEffect(() =>{
+        CitiesService.getAll()
+        .then((data: any[] | undefined) => {
+            if (data !== null && data !== undefined) {
+               setCitisArr(data);
+            }
+         });
+    },[]);
+
     const setField = (field: any, value: any) => {
         setForm({
             ...form,
@@ -108,13 +124,7 @@ const StudentsForm: React.FC<{}> = () => {
                 </Form.Group>
                 <Form.Group controlId="studentsForm.city">
                     <Form.Label>City: </Form.Label>
-                    <Form.Control as="select">
-                        <option>City 1</option>
-                        <option>City 2</option>
-                        <option>City 3</option>
-                        <option>City 4</option>
-                        <option>City 5</option>
-                    </Form.Control>
+                    <MySelect data={citisArr} keyProp='city_id' valProp='city_name' onChange={onSelectCity}></MySelect>
                 </Form.Group>
                 <Button variant="primary" onClick={handleSubmit}>Save</Button>{' '}
             </Form>
