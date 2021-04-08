@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -6,38 +6,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyCard from './MyCard';
 import MySelect from './MySelect';
 import CitiesService from '../services/citiesService';
-
-interface Student {
-    firstName: string,
-    lastName: string,
-    id: string,
-}
-
-function macthHeb(str: string) {
-    return (str.match(/^[-\u0590-\u05FF]+$/))
-}
-function macthInt(str: string) {
-    const parsed = parseInt(str, 10);
-    return (!isNaN(parsed));
-}
+import StudentsService from '../services/studentsService';
+import { macthHeb, macthInt } from '../services/utils';
+import { Student } from '../interfaces/student.interface';
 
 const StudentsForm: React.FC<{}> = () => {
     //const [ firstName, setFirstName ] = useState('');
     const [form, setForm] = useState({} as Student);
     const [errors, setErrors] = useState({} as Student);
     const [citisArr, setCitisArr] = useState([] as any[]);
-    const onSelectCity = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-        console.log(event.target.value);
-      }, []);
 
-    useEffect(() =>{
+    useEffect(() => {
         CitiesService.getAll()
-        .then((data: any[] | undefined) => {
-            if (data !== null && data !== undefined) {
-               setCitisArr(data);
-            }
-         });
-    },[]);
+            .then((data: any[] | undefined) => {
+                if (data !== null && data !== undefined) {
+                    setCitisArr(data);
+                }
+            });
+    }, []);
 
     const setField = (field: any, value: any) => {
         setForm({
@@ -51,22 +37,30 @@ const StudentsForm: React.FC<{}> = () => {
             [field]: null
         })
     };
+
+    const onSelectCity = (event: ChangeEvent<HTMLSelectElement>) => {
+        setField('city_id', event.target.value);
+    };
+
     const validateForm = () => {
-        const { firstName, lastName, id } = form;
+        const { first_name, last_name, israel_id } = form;
         console.log(JSON.stringify(form))
         const newErrors = {} as Student;
         // firstName errors
-        if (!firstName || firstName === '') newErrors.firstName = 'cannot be blank!'
-        else if (firstName.length > 20) newErrors.firstName = 'first Name is too long!'
-        else if (!macthHeb(firstName)) newErrors.firstName = 'first Name should be in hebrew!'
+        if (!first_name || first_name === '') newErrors.first_name = 'First Name cannot be blank!';
+        else if (!macthHeb(first_name)) newErrors.first_name = 'First Name should be in hebrew!'
+        else if (first_name.length > 20) newErrors.first_name = 'First Name is too long!'
+
         // lastName errors
-        if (!lastName || lastName === '') newErrors.lastName = 'cannot be blank!'
-        else if (lastName.length > 20) newErrors.lastName = 'last Name is too long!'
-        else if (!macthHeb(lastName)) newErrors.lastName = 'last Name should be in hebrew!'
-        // firstName errors
-        if (!id) newErrors.id = 'id cannotbe blank!'
-        else if (id.length !== 9) newErrors.id = 'ID Name must have 9 digits'
-        else if (!macthInt(id)) newErrors.lastName = 'last Name should be in hebrew!'
+        if (!last_name || last_name === '') newErrors.last_name = 'Last Name cannot be blank!';
+        else if (!macthHeb(last_name)) newErrors.last_name = 'Last Name should be in hebrew!';
+        else if (last_name.length > 20) newErrors.last_name = 'Last Name is too long!'
+
+        // id errors
+        if (!israel_id) newErrors.israel_id = 'ID cannotbe blank!'
+        else if (!macthInt(israel_id)) newErrors.last_name = 'ID should conatin digits';
+        else if (israel_id.length !== 9) newErrors.israel_id = 'ID must have 9 digits';
+
         return newErrors
     }
     const handleSubmit = (e: any) => {
@@ -78,51 +72,65 @@ const StudentsForm: React.FC<{}> = () => {
             // We got errors!
             setErrors(newErrors)
         } else {
-            // No errors! Put any logic here for the form submission!
+            const { first_name, last_name, israel_id, birth_date, city_id } = form;
+            const s: Student = {
+                first_name: first_name,
+                last_name: last_name,
+                israel_id: israel_id,
+                birth_date: birth_date,
+                city_id: city_id
+            };
+            StudentsService.postStudent(s);
             alert('Thank you for your feedback!')
         }
     }
     return (
         <MyCard sizeWidth="300px">
             <Form>
-                <Form.Group controlId="studentsForm.firstName">
+                <Form.Group controlId="studentsForm.first_name">
                     <Form.Label>First Name: </Form.Label>
                     <Form.Control
                         type="text"
-                        onChange={e => setField('firstName', e.target.value)}
-                        isInvalid={!!errors.firstName}
+                        onChange={e => setField('first_name', e.target.value)}
+                        isInvalid={!!errors.first_name}
                     />
                     <Form.Control.Feedback type='invalid'>
-                        {errors.firstName}
+                        {errors.first_name}
                     </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="studentsForm.lastName">
+                <Form.Group controlId="studentsForm.last_name">
                     <Form.Label>Last Name: </Form.Label>
                     <Form.Control
                         type="text"
-                        onChange={e => setField('lastName', e.target.value)}
-                        isInvalid={!!errors.lastName}
+                        onChange={e => setField('last_name', e.target.value)}
+                        isInvalid={!!errors.last_name}
                     />
                     <Form.Control.Feedback type='invalid'>
-                        {errors.lastName}
+                        {errors.last_name}
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group controlId="studentsForm.dateBirth">
                     <Form.Label>Date Of Birth: </Form.Label>
-                    <Form.Control type="text" />
+                    <Form.Control type="text" 
+                    isInvalid={!!errors.birth_date}
+                     onChange={e => setField('birth_date', e.target.value)}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                        {errors.birth_date}
+                    </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="studentsForm.id">
+                <Form.Group controlId="studentsForm.israel_id">
                     <Form.Label>Israel ID: </Form.Label>
                     <Form.Control
                         type="text"
-                        onChange={e => setField('id', e.target.value)}
-                        isInvalid={!!errors.id}
+                        onChange={e => setField('israel_id', e.target.value)}
+                        isInvalid={!!errors.israel_id}
                     />
                     <Form.Control.Feedback type='invalid'>
-                        {errors.id}
+                        {errors.israel_id}
                     </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group controlId="studentsForm.city">
+                <Form.Group controlId="studentsForm.city_id">
                     <Form.Label>City: </Form.Label>
                     <MySelect data={citisArr} keyProp='city_id' valProp='city_name' onChange={onSelectCity}></MySelect>
                 </Form.Group>
