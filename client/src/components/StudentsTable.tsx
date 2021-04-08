@@ -18,7 +18,7 @@ const StudentsTable: React.FC<{}> = () => {
     }, []);
     return (
         <MyCard>
-            <Table striped bordered hover>
+            <Table striped responsive bordered size="sm">
                 <thead>
                     <tr>
                         <th>#</th>

@@ -98,7 +98,7 @@ const StudentsForm: React.FC<{}> = () => {
         }
     }
     return (
-        <MyCard sizeWidth="300px">
+        <MyCard >
             <Form>
                 <Form.Group controlId="studentsForm.first_name">
                     <Form.Label>First Name: </Form.Label>
@@ -124,7 +124,9 @@ const StudentsForm: React.FC<{}> = () => {
                 </Form.Group>
                 <Form.Group controlId="studentsForm.dateBirth">
                     <Form.Label>Date Of Birth: </Form.Label>
+                    <br/>
                     <DatePicker
+                        className = "form-control"
                         selected={birthDate}
                         onChange={date => pickBirthDate(date)}
                     />
