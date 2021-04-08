@@ -1,12 +1,15 @@
+const util = require('util');
 const mysql = require('mysql');
 
+const config = {
+    host: 'localhost',
+    user: 'root',
+    password: '12345',
+    database: 'mitav1'
+};
+
 class Database {
-    con = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '12345',
-        database: 'mitav1'
-    });
+    con = mysql.createConnection(config);
     constructor() {
         this.connect();
         // global.mongoose = mongoose
@@ -21,6 +24,10 @@ class Database {
             console.log('Connection to Db established');
         });
     }
+    query(sql, args) {
+        return util.promisify( this.con.query)
+            .call( this.con, sql, args);
+    };
     disconnect() {
         this.con.end((err) => {
             // The connection is terminated gracefully

@@ -1,5 +1,5 @@
 const http = require('http');
-const app = require('./app');
+const app = require('./src/app');
 
 // Get port from environment and store in Express.
 const port = process.env.PORT || 5000;
