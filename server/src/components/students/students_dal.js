@@ -2,7 +2,7 @@ const db = require('../../database');
 
 class StudentsDal {
     get = async () => {
-        const sql = 'SELECT students.*, cities.city_name FROM students INNER JOIN cities ON (students.city_id  = cities.city_id)';
+        const sql = 'SELECT students.*, cities.city_name FROM students INNER JOIN cities ON (students.city_id  = cities.city_id) ORDER By students.id';
         const rows = await db.query(sql);
         return rows;
     }

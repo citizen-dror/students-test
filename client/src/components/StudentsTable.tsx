@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import MyCard from './MyCard';
 import StudentsService from '../services/studentsService';
+import {sqlDateToUiFormat} from '../services/utils';
 
 const StudentsTable: React.FC<{}> = () => {
     const [studentsArr, setStudentsArr] = useState([] as any[]);
@@ -30,11 +31,12 @@ const StudentsTable: React.FC<{}> = () => {
                 </thead>
                 <tbody>
                     {studentsArr.map((item) => {
+                        const bdate = sqlDateToUiFormat(item.birth_date);
                         return <tr key={item.id}>
                             <td>{item.id}</td>
                             <td>{item.first_name}</td>
                             <td>{item.last_name}</td>
-                            <td>{item.birth_date}</td>
+                            <td>{bdate}</td>
                             <td>{item.israel_id}</td>
                             <td>{item.city_name}</td>
                         </tr>
