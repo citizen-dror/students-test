@@ -3,7 +3,7 @@ const service = require('./cities_service');
 
 const router = Router();
 
-const citiesRoute = (app) => {
+module.exports = (app) => {
   app.use('/api/v1/cities', router);
 
   //controlers
@@ -12,4 +12,3 @@ const citiesRoute = (app) => {
     return res.jsonp(doc);
   });
 }
-module.exports = {citiesRoute};

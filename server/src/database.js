@@ -28,6 +28,7 @@ class Database {
         return util.promisify( this.con.query)
             .call( this.con, sql, args);
     };
+
     disconnect() {
         this.con.end((err) => {
             // The connection is terminated gracefully
