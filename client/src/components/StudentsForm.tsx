@@ -1,25 +1,32 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import MyCard from './MyCard';
 import MySelect from './MySelect';
 import CitiesService from '../services/citiesService';
 import StudentsService from '../services/studentsService';
-import { macthHeb, macthInt } from '../services/utils';
+import { macthHeb, macthInt, formatDate } from '../services/utils';
 import { Student } from '../interfaces/student.interface';
 
 const StudentsForm: React.FC<{}> = () => {
     //const [ firstName, setFirstName ] = useState('');
     const [form, setForm] = useState({} as Student);
     const [errors, setErrors] = useState({} as Student);
+    const [birthDate, setBirthDate] = useState(new Date());
     const [citisArr, setCitisArr] = useState([] as any[]);
 
     useEffect(() => {
         CitiesService.getAll()
             .then((data: any[] | undefined) => {
                 if (data !== null && data !== undefined) {
+                    data.unshift({
+                        city_id: 0,
+                        city_name: "בחר עיר"
+                    })
                     setCitisArr(data);
                 }
             });
@@ -41,10 +48,13 @@ const StudentsForm: React.FC<{}> = () => {
     const onSelectCity = (event: ChangeEvent<HTMLSelectElement>) => {
         setField('city_id', event.target.value);
     };
-
+    const pickBirthDate = (date: Date | null | [Date, Date]) => {
+        if (date && date instanceof Date) {
+            setBirthDate(date);
+        }
+    }
     const validateForm = () => {
-        const { first_name, last_name, israel_id } = form;
-        console.log(JSON.stringify(form))
+        const { first_name, last_name, israel_id, city_id } = form;
         const newErrors = {} as Student;
         // firstName errors
         if (!first_name || first_name === '') newErrors.first_name = 'First Name cannot be blank!';
@@ -61,6 +71,8 @@ const StudentsForm: React.FC<{}> = () => {
         else if (!macthInt(israel_id)) newErrors.last_name = 'ID should conatin digits';
         else if (israel_id.length !== 9) newErrors.israel_id = 'ID must have 9 digits';
 
+        // city_id errors
+        if (!city_id || city_id === '0') newErrors.city_id = 'Please Pick a City!'
         return newErrors
     }
     const handleSubmit = (e: any) => {
@@ -72,7 +84,8 @@ const StudentsForm: React.FC<{}> = () => {
             // We got errors!
             setErrors(newErrors)
         } else {
-            const { first_name, last_name, israel_id, birth_date, city_id } = form;
+            const { first_name, last_name, israel_id, city_id } = form;
+            const birth_date = formatDate(birthDate, true);
             const s: Student = {
                 first_name: first_name,
                 last_name: last_name,
@@ -111,9 +124,9 @@ const StudentsForm: React.FC<{}> = () => {
                 </Form.Group>
                 <Form.Group controlId="studentsForm.dateBirth">
                     <Form.Label>Date Of Birth: </Form.Label>
-                    <Form.Control type="text" 
-                    isInvalid={!!errors.birth_date}
-                     onChange={e => setField('birth_date', e.target.value)}
+                    <DatePicker
+                        selected={birthDate}
+                        onChange={date => pickBirthDate(date)}
                     />
                     <Form.Control.Feedback type='invalid'>
                         {errors.birth_date}
@@ -132,7 +145,15 @@ const StudentsForm: React.FC<{}> = () => {
                 </Form.Group>
                 <Form.Group controlId="studentsForm.city_id">
                     <Form.Label>City: </Form.Label>
-                    <MySelect data={citisArr} keyProp='city_id' valProp='city_name' onChange={onSelectCity}></MySelect>
+                    <MySelect
+                        data={citisArr}
+                        keyProp='city_id' valProp='city_name'
+                        onChange={onSelectCity}
+                        isInvalid={!!errors.city_id}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                        {errors.city_id}
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" onClick={handleSubmit}>Save</Button>{' '}
             </Form>
