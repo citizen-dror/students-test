@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import MyCard from './MyCard';
+import StudentsService from '../services/studentsService';
 
 const StudentsTable: React.FC<{}> = () => {
+    const [studentsArr, setStudentsArr] = useState([] as any[]);
+    useEffect(() => {
+        StudentsService.getAll()
+            .then((data: any[] | undefined) => {
+                if (data !== null && data !== undefined) {
+                    setStudentsArr(data);
+                }
+            });
+    }, []);
+    console.log(studentsArr)
     return (
         <MyCard>
             <Table striped bordered hover>
@@ -13,22 +24,22 @@ const StudentsTable: React.FC<{}> = () => {
                         <th>#</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Birth Date</th>
+                        <th>Id</th>
+                        <th>City</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
+                    {studentsArr.map((item) => {
+                        return <tr key={item.id}>
+                            <td>{item.id}</td>
+                            <td>{item.first_name}</td>
+                            <td>{item.last_name}</td>
+                            <td>{item.birth_date}</td>
+                            <td>{item.israel_id}</td>
+                            <td>{item.city_name}</td>
+                        </tr>
+                    })}
                 </tbody>
             </Table>
         </MyCard>

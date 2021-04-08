@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import StudentsForm from './components/StudetsForm.tsx';
+import StudentsForm from './components/StudentsForm.tsx';
 import StudentsTable from './components/StudentsTable.tsx';
 
 function App() {
