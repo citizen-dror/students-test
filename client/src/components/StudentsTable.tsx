@@ -15,7 +15,6 @@ const StudentsTable: React.FC<{}> = () => {
                 }
             });
     }, []);
-    console.log(studentsArr)
     return (
         <MyCard>
             <Table striped bordered hover>
