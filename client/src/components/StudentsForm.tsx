@@ -97,69 +97,84 @@ const StudentsForm: React.FC<{}> = () => {
             alert('Thank you for your feedback!')
         }
     }
+    const styles = {
+        div1: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        card: {
+            width: 400,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }
+    }
     return (
-        <MyCard >
-            <Form>
-                <Form.Group controlId="studentsForm.first_name">
-                    <Form.Label>First Name: </Form.Label>
-                    <Form.Control
-                        type="text"
-                        onChange={e => setField('first_name', e.target.value)}
-                        isInvalid={!!errors.first_name}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {errors.first_name}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="studentsForm.last_name">
-                    <Form.Label>Last Name: </Form.Label>
-                    <Form.Control
-                        type="text"
-                        onChange={e => setField('last_name', e.target.value)}
-                        isInvalid={!!errors.last_name}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {errors.last_name}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="studentsForm.dateBirth">
-                    <Form.Label>Date Of Birth: </Form.Label>
-                    <br/>
-                    <DatePicker
-                        className = "form-control"
-                        selected={birthDate}
-                        onChange={date => pickBirthDate(date)}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {errors.birth_date}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="studentsForm.israel_id">
-                    <Form.Label>Israel ID: </Form.Label>
-                    <Form.Control
-                        type="text"
-                        onChange={e => setField('israel_id', e.target.value)}
-                        isInvalid={!!errors.israel_id}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {errors.israel_id}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group controlId="studentsForm.city_id">
-                    <Form.Label>City: </Form.Label>
-                    <MySelect
-                        data={citisArr}
-                        keyProp='city_id' valProp='city_name'
-                        onChange={onSelectCity}
-                        isInvalid={!!errors.city_id}
-                    />
-                    <Form.Control.Feedback type='invalid'>
-                        {errors.city_id}
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Button variant="primary" onClick={handleSubmit}>Save</Button>{' '}
-            </Form>
-        </MyCard>
+        <div style={styles.div1}>
+            <MyCard style={styles.card}>
+                <Form>
+                    <Form.Group controlId="studentsForm.first_name">
+                        <Form.Label>First Name: </Form.Label>
+                        <Form.Control
+                            type="text"
+                            onChange={e => setField('first_name', e.target.value)}
+                            isInvalid={!!errors.first_name}
+                        />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.first_name}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="studentsForm.last_name">
+                        <Form.Label>Last Name: </Form.Label>
+                        <Form.Control
+                            type="text"
+                            onChange={e => setField('last_name', e.target.value)}
+                            isInvalid={!!errors.last_name}
+                        />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.last_name}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="studentsForm.dateBirth">
+                        <Form.Label>Date Of Birth: </Form.Label>
+                        <br />
+                        <DatePicker
+                            className="form-control"
+                            selected={birthDate}
+                            onChange={date => pickBirthDate(date)}
+                        />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.birth_date}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="studentsForm.israel_id">
+                        <Form.Label>Israel ID: </Form.Label>
+                        <Form.Control
+                            type="text"
+                            onChange={e => setField('israel_id', e.target.value)}
+                            isInvalid={!!errors.israel_id}
+                        />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.israel_id}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="studentsForm.city_id">
+                        <Form.Label>City: </Form.Label>
+                        <MySelect
+                            data={citisArr}
+                            keyProp='city_id' valProp='city_name'
+                            onChange={onSelectCity}
+                            isInvalid={!!errors.city_id}
+                        />
+                        <Form.Control.Feedback type='invalid'>
+                            {errors.city_id}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Button variant="primary" onClick={handleSubmit}>Save</Button>{' '}
+                </Form>
+            </MyCard>
+        </div>
     )
 }
 
