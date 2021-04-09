@@ -1,11 +1,18 @@
 const util = require('util');
 const mysql = require('mysql');
 
-const config = {
+const config1 = {
     host: 'localhost',
     user: 'root',
     password: '12345',
     database: 'mitav1'
+};
+
+const config = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.DB_NAME
 };
 
 class Database {
