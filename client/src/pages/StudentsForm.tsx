@@ -93,8 +93,19 @@ const StudentsForm: React.FC<{}> = () => {
                 birth_date: birth_date,
                 city_id: city_id
             };
-            StudentsService.postStudent(s);
-            alert('Thank you for your feedback!')
+            StudentsService.postStudent(s)
+                .then((data: any | undefined) => {
+                if (data) {
+                    const {affectedRows} = data;
+                    if (affectedRows && affectedRows> 0){
+                        alert('Student details were updated!');
+                    } else {
+                        alert('Undale to update student details');
+                    }
+                  
+                }
+            });
+           
         }
     }
     const styles = {
