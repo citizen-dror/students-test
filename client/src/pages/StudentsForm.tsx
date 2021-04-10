@@ -5,8 +5,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import MyCard from './MyCard';
-import MySelect from './MySelect';
+import MyCard from '../components/MyCard';
+import MySelect from '../components/MySelect';
 import CitiesService from '../services/citiesService';
 import StudentsService from '../services/studentsService';
 import { macthHeb, macthInt, formatDate } from '../services/utils';

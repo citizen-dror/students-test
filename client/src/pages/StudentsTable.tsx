@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import MyCard from './MyCard';
+import MyCard from '../components/MyCard';
 import StudentsService from '../services/studentsService';
 import {sqlDateToUiFormat} from '../services/utils';
 

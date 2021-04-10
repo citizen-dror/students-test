@@ -3,32 +3,17 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
-import StudentsForm from './components/StudentsForm.tsx';
-import StudentsTable from './components/StudentsTable.tsx';
+import Header from './components/Header.tsx';
+import StudentsForm from './pages/StudentsForm.tsx';
+import StudentsTable from './pages/StudentsTable.tsx';
 
 function App() {
   return (
     <div className="App">
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/form">Students Form</Link>
-              </li>
-              <li>
-                <Link to="/table">Students Table</Link>
-              </li>
-            </ul>
-          </nav>
-
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+          <Header />
           <Switch>
             <Route path="/form">
               <StudentsForm />
