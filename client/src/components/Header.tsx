@@ -10,9 +10,8 @@ const Header: React.FC<Props> = () => {
         <Navbar bg="primary" variant="dark">
             <Navbar.Brand href="/">Studetns</Navbar.Brand>
             <Nav className="mr-auto">
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/form">Students Form</Nav.Link>
-                <Nav.Link href="/table">Students Table</Nav.Link>
+                <Nav.Link href="/form">Form</Nav.Link>
+                <Nav.Link href="/table">Table</Nav.Link>
             </Nav>
         </Navbar>
     )
