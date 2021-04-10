@@ -19,6 +19,9 @@ const StudentsForm: React.FC<{}> = () => {
     const [birthDate, setBirthDate] = useState(new Date());
     const [citisArr, setCitisArr] = useState([] as any[]);
 
+    /**
+     * load cities combo
+     */
     useEffect(() => {
         CitiesService.getAll()
             .then((data: any[] | undefined) => {
@@ -32,6 +35,11 @@ const StudentsForm: React.FC<{}> = () => {
             });
     }, []);
 
+    /**
+     * update state from UI
+     * @param field name of field
+     * @param value user input
+     */
     const setField = (field: any, value: any) => {
         setForm({
             ...form,
@@ -53,6 +61,11 @@ const StudentsForm: React.FC<{}> = () => {
             setBirthDate(date);
         }
     }
+    /**
+     * validate all the contorols 
+     * @returns error obejct with un-valid contol messges. 
+     * if all controls are valid will be emtpy obeject  
+     */
     const validateForm = () => {
         const { first_name, last_name, israel_id, city_id } = form;
         const newErrors = {} as Student;
@@ -75,11 +88,14 @@ const StudentsForm: React.FC<{}> = () => {
         if (!city_id || city_id === '0') newErrors.city_id = 'Please Pick a City!'
         return newErrors
     }
+    /**
+     * validate the input, and if all is ok send the data to the server
+     * @param e 
+     */
     const handleSubmit = (e: any) => {
         e.preventDefault()
-        // get our new errors
+        // get new errors object
         const newErrors = validateForm()
-        // Conditional logic:
         if (Object.keys(newErrors).length > 0) {
             // We got errors!
             setErrors(newErrors)
@@ -153,6 +169,7 @@ const StudentsForm: React.FC<{}> = () => {
                         <DatePicker
                             className="form-control"
                             selected={birthDate}
+                            dateFormat="dd/MM/yyyy"
                             onChange={date => pickBirthDate(date)}
                         />
                         <Form.Control.Feedback type='invalid'>
